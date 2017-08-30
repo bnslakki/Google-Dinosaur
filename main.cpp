@@ -13,6 +13,7 @@ static int isAnimate = 0;
 
 const int fact = 3;
 const int x = 80;
+const double DEG2RAD = 3.1415926535897932384/180;
 
 static double w = 200;
 static int flag = 0;
@@ -50,6 +51,52 @@ void specialKeyInput(int key , int x , int y ){
     }
     glutPostRedisplay();
 }
+
+void draw_circle(double theta, double inner_radius, double outer_radius, int x, int y, int sin_sign = 1, int cos_sign = 1){
+   glBegin(GL_POINTS);
+   glColor3f(0.0/ 255.0, 0.0/ 255.0, 0.0/ 255.0);
+   for(double r = outer_radius; r >= inner_radius; r -= 0.5){
+        for(double i = 0; i < theta ; i++){
+          double degInRad = i * DEG2RAD;
+          glVertex2f( cos_sign * cos(degInRad) * r + x , sin_sign * sin(degInRad) * r + y  );
+       }
+   }
+   glEnd();
+}
+
+void generate_tree(int x, double len){
+    glColor3f((0) / 255.0, (0) / 255.0, (0) / 255.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(x_, 250 * len);
+        glVertex2f(x_ + x, 250 * len);
+        glVertex2f(x_ + x, 650 * len);
+        glVertex2f(x_, 650 * len);
+    glEnd();
+
+    draw_circle(180.0, 0.0, x / 2, x_ + x / 2, 650 * len);
+
+    glBegin(GL_POLYGON);
+        glVertex2f(x_ + x + 25, 400 * len);
+        glVertex2f(x_ + x + 50, 400 * len);
+        glVertex2f(x_ + x + 50, 600 * len);
+        glVertex2f(x_ + x + 25, 600 * len);
+    glEnd();
+
+    draw_circle(180.0, 0.0, 25.0 / 2, x_ + x + 75.0 / 2, 600 * len);
+
+    glBegin(GL_POLYGON);
+        glVertex2f(x_ - 25, 400 * len);
+        glVertex2f(x_ - 50, 400 * len);
+        glVertex2f(x_ - 50, 600 * len);
+        glVertex2f(x_ - 25, 600 * len);
+    glEnd();
+
+    draw_circle(180.0, 0.0, 25.0 / 2, x_ - 75.0 / 2, 600 * len);
+
+    draw_circle(90.0, 25, 50, x_ + x, 400 * len, -1);
+    draw_circle(90.0, 25, 50, x_, 400 * len, -1, -1);
+}
+
 void render( void ){
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -62,13 +109,8 @@ void render( void ){
         }
     glEnd();
 
-    glBegin(GL_POLYGON);
-        glColor3f((0) / 255.0, (0) / 255.0, (0) / 255.0);
-        glVertex2f(x_, 250);
-        glVertex2f(x_+50, 250);
-        glVertex2f(x_+50, 650);
-        glVertex2f(x_, 650);
-    glEnd();
+    generate_tree(50, 1);
+
     if(x_>= 0)
         x_ -= 5;
     else{
