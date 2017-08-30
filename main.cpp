@@ -41,8 +41,12 @@ void keyInput(unsigned char key , int x, int y){
         break;
     }
 }
-void collision(){
-
+bool collision(double len){
+    if(abs(157 + x - (x_ + x + 50)) <= 100 + x){
+        if(5 * fact + w <= 650 * len)return 1;
+        return 0;
+    }
+    return 0;
 }
 
 void specialKeyInput(int key , int x , int y ){
@@ -97,6 +101,14 @@ void generate_tree(int x_, double len){
     draw_circle(90.0, 25, 50, x_, 400 * len, -1, -1);
 }
 
+void reset(){
+    w = 200;
+    flag = 0;
+    walk = 0;
+    x_ = 2500;
+    animationPeriod = 4;
+    isAnimate = 0;
+}
 void render( void ){
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -202,6 +214,10 @@ void render( void ){
         glVertex2f(157 + x, 85 * fact + w);
 
     glEnd();
+
+    if(collision(1.0)){
+        reset();
+    }
     if( w <=200){
         if(walk==-20 )
             walk = 20;
